@@ -1,0 +1,60 @@
+#include <gdiplus.h>
+#include <process.h>
+#pragma comment(lib, "gdiplus")
+using namespace Gdiplus;
+
+HWND Draw2D_hwnd;
+UINT m_IndexOfFrame = 0, m_NumOfDimensions, m_NumOfFrame = 0;
+PropertyItem *m_PropertyItem;
+
+VOID show_thread(PVOID pvoid) { Sleep(1); m_IndexOfFrame = 0; while (1){ m_IndexOfFrame += 1; Sleep(((LONG *)m_PropertyItem->value)[m_IndexOfFrame] * 10); } }
+
+void Draw2D(PVOID pvoid)
+{
+	Sleep(1);
+	ULONG_PTR gdipludToken;
+	GdiplusStartupInput gdiplusInput;
+	GdiplusStartup(&gdipludToken, &gdiplusInput, NULL);
+	GUID Guid = FrameDimensionTime;
+
+	Image min_normal(TEXT("background.png"));
+	Image monster(TEXT("zfish.gif"));
+	m_NumOfDimensions = monster.GetFrameDimensionsCount();
+	if (m_NumOfDimensions)
+	{
+		GUID *pDimensionsIDs = new GUID[m_NumOfDimensions];
+		monster.GetFrameDimensionsList(pDimensionsIDs, m_NumOfDimensions);
+		UINT i = 1;
+		while (i <= m_NumOfDimensions) { m_NumOfFrame += monster.GetFrameCount(&pDimensionsIDs[i - 1]); i++; }
+		delete[]pDimensionsIDs;
+		int FrameDelayNums = monster.GetPropertyItemSize(PropertyTagFrameDelay);
+		m_PropertyItem = new PropertyItem[FrameDelayNums];
+		monster.GetPropertyItem(PropertyTagFrameDelay, FrameDelayNums, m_PropertyItem);
+	}
+
+	RECT rect;
+	HDC hdc = GetDC(Draw2D_hwnd);
+	GetClientRect(Draw2D_hwnd, &rect);
+	Bitmap bmp(rect.right, rect.bottom);
+	SolidBrush brush(Color(255, 255, 255));
+	Graphics gbmp(&bmp);
+	Graphics graphics(hdc);
+
+	_beginthread(show_thread, 0, NULL);
+
+	while (1)
+	{
+		gbmp.FillRectangle(&brush, 0, 0, rect.right, rect.bottom);
+
+		gbmp.DrawImage(&min_normal, 0, 0, min_normal.GetWidth(), min_normal.GetHeight());
+
+		monster.SelectActiveFrame(&Guid, m_IndexOfFrame);
+		gbmp.DrawImage(&monster, 300, 300, monster.GetWidth(), monster.GetHeight());
+		if (m_IndexOfFrame == m_NumOfFrame - 1) m_IndexOfFrame = 0;
+
+		graphics.DrawImage(&bmp, 0, 0, rect.right, rect.bottom);
+	}
+
+	ReleaseDC(Draw2D_hwnd, hdc);
+	GdiplusShutdown(gdipludToken);
+}
