@@ -1,0 +1,14 @@
+template <typename T>
+inline void foo(T var) {}
+
+class Susake {};
+
+Susake *A = nullptr;
+
+int main(int argc, char *argv[]) {
+  
+  A = new Susake();
+  delete A;
+  
+  return 0;
+}
