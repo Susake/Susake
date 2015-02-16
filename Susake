@@ -12,3 +12,10 @@ int main(int argc, char *argv[]) {
   
   return 0;
 }
+
+倾向于炫技，陶醉于对语言各种细节的深入探索，华丽化，复杂化
+void
+
+The (nonexistent) value of a void expression (an expression that has type void) shall not be used in any way, and implicit or explicit conversions (except to void) shall not be applied to such an expression. If an expression of any other type is evaluated as a void expression, its value or designator is discarded. (A void expression is evaluated for its side effects.)
+
+void;
