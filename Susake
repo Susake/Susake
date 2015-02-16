@@ -45,3 +45,127 @@ bool true false char char16_t char32_t wchar_t int float double unsigned signed 
 break case continue default do else for goto if switch while
 这些都太简单了
 /***************************************
+const
+
+const int val = 1;//将val定义成值为1的int型常量
+extern
+
+The external representations in a text file need not be identical to the internal representations, and are outside the scope of this International Standard.
+
+main1.cpp
+int a = 1;
+main2.cpp
+extern int a;
+【translation unit】 
+
+The text of the program is kept in units called source files in this International Standard. A source file together with all the headers (17.6.1.2) and source files included (16.2) via the preprocessing directive #include, less any source lines skipped by any of the conditional inclusion (16.1) preprocessing directives, is called a translation unit
+
+inline 
+
+A function declared with an inline function specifier is an inline function. Making a function an inline function suggests that calls to the function be as fast as possible.138)
+
+inline void foo() { /*...*/ }
+register
+
+A declaration of an identifier for an object with storage-class specifier register suggests that access to the object be as fast as possible. The extent to which such suggestions are effective is implementation-defined.121)
+
+register int val;
+restrict
+
+static
+
+If the declaration of a file scope identifier for an object or a function contains the storageclass specifier static, the identifier has internal linkage.30)
+
+static int val;
+volatile
+
+1.The semantic descriptions in this International Standard describe the behavior of an abstract machine in which issues of optimization are irrelevant.
+2.Accessing a volatile object, modifying an object, modifying a file, or calling a function that does any of those operations are all side effects,12) which are changes in the state of the execution environment. Evaluation of an expression in general includes both value computations and initiation of side effects. Value computation for an lvalue expression includes determining the identity of the designated object.
+3.Accesses to volatile objects are evaluated strictly according to the rules of the abstract machine.
+
+volatile int val;
+volatile所修饰的对象不会被abstract machine优化
+
+const_cast
+
+The result of the expression const_cast<T>(v) is of type T.
+
+const int val = 1;
+int v = const_cast <int &> (val);
+dynamic_cast
+
+reinterpret_cast
+
+static_cast
+
+struct
+
+union
+
+enum
+
+class
+
+----
+
+return 
+
+sizeof
+
+typedef
+
+alignas
+
+alignof
+
+asm
+
+constexpr
+
+const可能会在编译期间被修改，这时应该使用constexpr
+
+decltype
+
+delete
+
+explicit
+
+export
+
+friend
+
+mutable
+
+namespace
+
+new
+
+noexcept
+
+operator
+
+private
+
+protected
+
+public
+
+static_assert
+
+template
+
+this
+
+thread_local
+
+throw
+
+try
+
+typeid
+
+typename
+
+using
+
+virtual
