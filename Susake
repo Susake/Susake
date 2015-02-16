@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
 }
 
 倾向于炫技，陶醉于对语言各种细节的深入探索，华丽化，复杂化
+/***************************************
 void
 
 The (nonexistent) value of a void expression (an expression that has type void) shall not be used in any way, 
@@ -22,3 +23,25 @@ of any other type is evaluated as a void expression, its value or designator is 
 evaluated for its side effects.)
 
 void;
+/***************************************
+nullptr 
+
+both (int*)0 and nullptr are valid template-arguments for a non-type template-parameter of type “pointer to int.”
+
+【null pointer constant】
+
+An integer constant expression with the value 0, or such an expression cast to type void *, is called a null pointer constant.66) If a null pointer constant is converted to a pointer type, the resulting pointer, called a null pointer, is guaranteed to compare unequal to a pointer to any object or function
+
+nullptr对应的一定是指针型变量，而null对应的有可能是指针型变量或者常量0
+
+Types *val = nullptr;
+/***************************************
+auto
+
+auto val = Types;//自动将val转化为对应的类型
+/***************************************
+bool true false char char16_t char32_t wchar_t int float double unsigned signed short long
+
+break case continue default do else for goto if switch while
+这些都太简单了
+/***************************************
