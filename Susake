@@ -40,17 +40,22 @@ auto
 
 auto val = Types;//自动将val转化为对应的类型
 /***************************************
-bool true false char char16_t char32_t wchar_t int float double unsigned signed short long
+bool true false char char16_t char32_t wchar_t int float double unsigned signed short long class new delete emum
 
-break case continue default do else for goto if switch while
+break case continue default do else for goto if switch while namespace private protected public return sizeof struct
+
+template typename union using typedef
+
 这些都太简单了
 /***************************************
 const
 
 const int val = 1;//将val定义成值为1的int型常量
+/***************************************
 extern
 
-The external representations in a text file need not be identical to the internal representations, and are outside the scope of this International Standard.
+The external representations in a text file need not be identical to the internal representations, and are outside 
+the scope of this International Standard.
 
 main1.cpp
 int a = 1;
@@ -59,7 +64,7 @@ extern int a;
 【translation unit】 
 
 The text of the program is kept in units called source files in this International Standard. A source file together with all the headers (17.6.1.2) and source files included (16.2) via the preprocessing directive #include, less any source lines skipped by any of the conditional inclusion (16.1) preprocessing directives, is called a translation unit
-
+/***************************************
 inline 
 
 A function declared with an inline function specifier is an inline function. Making a function an inline function suggests that calls to the function be as fast as possible.138)
@@ -98,22 +103,6 @@ reinterpret_cast
 
 static_cast
 
-struct
-
-union
-
-enum
-
-class
-
-----
-
-return 
-
-sizeof
-
-typedef
-
 alignas
 
 alignof
@@ -126,8 +115,6 @@ const可能会在编译期间被修改，这时应该使用constexpr
 
 decltype
 
-delete
-
 explicit
 
 export
@@ -136,23 +123,11 @@ friend
 
 mutable
 
-namespace
-
-new
-
 noexcept
 
 operator
 
-private
-
-protected
-
-public
-
 static_assert
-
-template
 
 this
 
@@ -163,10 +138,6 @@ throw
 try
 
 typeid
-
-typename
-
-using
 
 virtual
 
