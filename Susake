@@ -83,9 +83,9 @@ object be as fast as possible. The extent to which such suggestions are effectiv
 
 register int val;
 /***************************************
-restrict
+restrict const_cast dynamic_cast reinterpret_cast static_cast alignas alignof asm
 
-IDE不一定支持
+IDE不一定支持或很少使用的
 /***************************************
 static
 
@@ -103,28 +103,10 @@ volatile
 volatile int val;
 volatile所修饰的对象不会被abstract machine优化
 /***************************************
-const_cast
-
-The result of the expression const_cast<T>(v) is of type T.
-
-const int val = 1;
-int v = const_cast <int &> (val);
-dynamic_cast
-
-reinterpret_cast
-
-static_cast
-
-alignas
-
-alignof
-
-asm
-
 constexpr
 
 const可能会在编译期间被修改，这时应该使用constexpr
-
+/***************************************
 decltype
 
 explicit
