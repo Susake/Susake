@@ -108,7 +108,10 @@ constexpr
 const可能会在编译期间被修改，这时应该使用constexpr
 /***************************************
 decltype
-
+获取表达式的数据类型
+int var;
+decltype(var) x;//x的类型为int
+/***************************************
 explicit
 
 export
