@@ -97,7 +97,10 @@ static int val;
 volatile
 
 1.The semantic descriptions in this International Standard describe the behavior of an abstract machine in which issues of optimization are irrelevant.
-2.Accessing a volatile object, modifying an object, modifying a file, or calling a function that does any of those operations are all side effects,12) which are changes in the state of the execution environment. Evaluation of an expression in general includes both value computations and initiation of side effects. Value computation for an lvalue expression includes determining the identity of the designated object.
+2.Accessing a volatile object, modifying an object, modifying a file, or calling a function that does any of those 
+operations are all side effects,12) which are changes in the state of the execution environment. Evaluation of an 
+expression in general includes both value computations and initiation of side effects. Value computation for 
+an lvalue expression includes determining the identity of the designated object.
 3.Accesses to volatile objects are evaluated strictly according to the rules of the abstract machine.
 
 volatile int val;
