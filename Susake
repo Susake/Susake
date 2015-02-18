@@ -46,7 +46,7 @@ bool true false char char16_t char32_t wchar_t int float double unsigned signed 
 
 break case continue default do else for goto if switch while namespace private protected public return sizeof struct
 
-template typename union using typedef try catch throw this
+template typename union using typedef try catch throw this export
 
 这些都太简单了
 /***************************************
@@ -113,8 +113,6 @@ const可能会在编译期间被修改，这时应该使用constexpr
 decltype
 
 explicit
-
-export
 
 friend
 /***************************************
