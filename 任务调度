@@ -1,0 +1,64 @@
+题意:Susake要完成n个任务,一共有v天,每种任务有起始时间和终止时间,价值为w[i],求最大价值
+输入
+1
+10 5
+1 5 100
+3 10 10
+5 10 100
+1 4 2
+6 12 266
+输出
+102
+#include <stdio.h>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+struct Node
+{
+    int start;
+    int end;
+    int w;
+};
+
+Node a[1111];
+
+int dp[1111];
+
+int comp(Node x, Node y)
+{
+    return x.end < y.end ? 1 : 0;
+}
+
+int main(int argc, char *argv[])
+{
+    int t, v, n, si, ei, wi;
+    scanf("%d", &t);
+    while(t--)
+    {
+        memset(a, 0, sizeof(a));
+        int k = 0;
+        scanf("%d%d", &v, &n);
+        for(int i = 1; i <= n; i++)
+        {
+            scanf("%d%d%d", &si, &ei, &wi);
+            if(si >= 1 && ei <= v)
+            {
+                k++;
+                a[k].start = si;
+                a[k].end = ei;
+                a[k].w = wi;
+            }
+        }
+        sort(a + 1, a + k + 1, comp);
+        memset(dp, 0, sizeof(dp));
+        for(int i = 1; i <= k; i++)
+        {
+            dp[a[i].end] = max(dp[a[i].end], dp[a[i].start - 1] + a[i].w);
+            for(int j = a[i].end + 1; j <= v; ++j)
+                dp[j] = max(dp[j], dp[j - 1]);
+        }
+        printf("%d\n", dp[v]);
+    }
+    return 0;
+}
