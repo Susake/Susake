@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define N 100
+int vexs[N], arcs[N][N];
+int vexNum, arcNum;
+int INF = 999;
+int sum;
+
+void Prim(int v)
+{
+    int s[N], i, j, w[N], u, min;
+    memset(s, 0, sizeof(s));
+    memset(s, 0, sizeof(w));
+    s[v] = 1;
+    for(i = 1; i <= vexNum; i++)
+        w[i] = arcs[v][i];
+    for(i = 2; i <= vexNum; i++)
+    {
+        min = INF;
+        for(j = 1; j <= vexNum; j++)
+        {
+            if(!s[j] && w[j] < min)
+            {
+                min = w[j];
+                u = j;
+            }
+        }
+         sum += min;
+        s[u] = 1;
+        for(j = 1; j <= vexNum; j++)
+            if(!s[j] && arcs[u][j] < w[j])
+                w[j] = arcs[u][j];
+    }
+}
+
+void Kruskal()
+{
+    int i, j, k, s1, s2, num, vset[N], v1, v2;
+    struct edgeType
+    {
+        int u, v, w;
+    }t, *edge;
+    edge = (struct edgeType *)malloc(arcNum * sizeof(struct edgeType));
+    k = 1;
+    for(i = 1; i <= vexNum; i++)
+        for(j = 1; j <= vexNum; j++)
+            if(arcs[i][j] != INF)
+            {
+                edge[k].u = i;
+                edge[k].v = j;
+                edge[k].w = arcs[i][j];
+                k++;
+            }
+    for(i = 2; i <= k; i++)
+        for(j = 1; j <= k - i; j++)
+            if(edge[j].w > edge[j + 1].w)
+            {
+                t = edge[j];
+                edge[j] = edge[j + 1];
+                edge[j + 1] = t;
+            }
+    for(i = 1; i <= vexNum; i++)
+        vset[i] = i;
+    num = 2; j = 1;
+    while(num <= vexNum)
+    {
+        v1 = edge[j].u;
+        v2 = edge[j].v;
+        s1 = vset[v1];
+        s2 = vset[v2];
+        if(s1 != s2)
+        {
+            sum += edge[j].w;//
+            num++;
+            for(i = 1; i <= vexNum; i++)
+                if(vset[i] == s2)
+                    vset[i] = s1;
+        }
+        j++;
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    int i, j, v1, v2;
+    scanf("%d%d", &vexNum, &arcNum);
+    for(i = 1; i <= vexNum; i++)
+        scanf("%d", &vexs[i]);
+    for(i = 1; i <= vexNum; i++)
+        for(j = 1; j <= vexNum; j++)
+            arcs[i][j] = INF;
+    for(i = 1; i <= arcNum; i++)
+    {
+        scanf("%d%d", &v1, &v2);
+        scanf("%d", &arcs[v1][v2]);
+        arcs[v2][v1] = arcs[v1][v2];
+    }
+    sum = 0;
+    //Prim(1);
+    Kruskal();
+    printf("%d\n", sum);
+    return 0;
+}
+/*
+5 7
+1 2 3 4 5
+1 2 2
+2 4 2
+4 5 4
+3 4 2
+2 5 1
+3 5 3
+1 3 1
+
+6
+*/
