@@ -1,0 +1,86 @@
+//自己撸的
+#include <bits/stdc++.h>
+
+int a[5] = {5, 3, 3, 2, 1};
+
+template <class T>
+inline T bfind(T r, T key)
+{
+    T l = 1, m, k, flag = 0;
+    while(l != r)
+    {
+        m = (r + l) / 2;
+        if(a[m] > key) l = m + 1;
+        if(a[m] < key) r = m - 1;
+        if(a[m] == key)
+        {
+            r = m - 1;
+            flag = 1;
+            k = m;
+            if(a[r] != key) break;
+        }
+    }
+    return flag ? k : -1;
+}
+
+int main(int argc, char *argv[])
+{
+    int key = 1;
+    printf("%d\n", bfind(5, key));
+        return 0;
+}
+//STL实现
+#include <bits/stdc++.h>
+
+int a[5] = {5, 3, 3, 2, 1};
+
+template <class T>
+inline T bfind(T r, T key)
+{
+    T l = 1, m, k, flag = 0;
+    while(l != r)
+    {
+        m = (r + l) / 2;
+        if(a[m] > key) l = m + 1;
+        if(a[m] < key) r = m - 1;
+        if(a[m] == key)
+        {
+            r = m - 1;
+            flag = 1;
+            k = m;
+            if(a[r] != key) break;
+        }
+    }
+    return flag ? k : -1;
+}
+
+int main(int argc, char *argv[])
+{
+    int key = 1;
+    printf("%d\n", bfind(5, key));
+        return 0;
+}
+//扩展库中的伸展树
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/priority_queue.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/trie_policy.hpp>
+
+std::priority_queue <int> pr_q;__gnu_pbds::trie <std::string, int> trie_t;
+__gnu_pbds::tree <int, int, std::less<int>, __gnu_pbds::splay_tree_tag, __gnu_pbds::tree_order_statistics_node_update> sp_t;
+__gnu_pbds::priority_queue<std::pair <int, int>,std::greater<std::pair <int, int> >, __gnu_pbds::pairing_heap_tag > pa_h;
+
+int main(int argc, char *argv[])
+{
+    sp_t[1] = 1;///0下标,为1的有一个
+    sp_t[2] = 1;///1下标,为2的有一个
+    sp_t[3] = 2;///2下标,为3的有两个
+    sp_t[5] = 1;///3下标,为5的有一个
+    int sum = 0;
+    int key = 5;///查询比key大的个数
+    for(int i = sp_t.order_of_key(key) + 1; i < sp_t.size(); i++)///从查找的元素的后一个序列开始
+        sum += sp_t[sp_t.find_by_order(i) -> first];
+    printf("%d\n", sum);
+        return 0;
+}
