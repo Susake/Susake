@@ -1,0 +1,96 @@
+题意:n个信封和1张卡片,求最多满足左信封<右信封的大小,最左边的信封能装入卡片
+输入
+3 3 3
+5 4
+12 11
+9 8
+输出
+3
+1 3 2
+#include <stdio.h>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+struct Node
+{
+    int si, sj;
+    unsigned short n;
+};
+
+Node Susake[5002];
+
+int short dp[5002][5002], b[5002], xx[5002];//path
+
+int comp(Node a, Node b)
+{
+    return a.sj > b.sj ? 0 : 1;
+}
+
+int main(int argc, char *argv[])
+{
+    int n, si, sj, Max, fi, fj, ei, ej, k;
+    while(scanf("%d%d%d", &n, &si, &sj) != EOF)
+    {
+        memset(Susake, 0, sizeof(Susake));
+        memset(dp, 0, sizeof(dp));
+        memset(b, 0, sizeof(b));
+        memset(xx, 0, sizeof(xx));
+        for(int i = 1; i <= n; i++)
+        {
+            scanf("%d%d", &Susake[i].si, &Susake[i].sj);
+            Susake[i].n = i;
+        }
+        sort(Susake + 1, Susake + n + 1, comp);
+        Max = 0;
+        for(int i = 1; i <= n; i++)
+        {
+            for(int j = 1; j <= i; j++)
+            {
+                if(Susake[i].si > Susake[j].si && Susake[i].sj > Susake[j].sj &&
+                   Susake[i].si > si && Susake[j].si > si &&
+                   Susake[i].sj > sj && Susake[j].sj > sj)
+                    dp[i][j] = b[j] + 1;
+                else if(Susake[i].si <= si || Susake[i].sj <= sj)
+                    dp[i][j] = 0;
+                else
+                    dp[i][j] = 1;
+                if(b[i] < dp[i][j])
+                {
+                    b[i] = dp[i][j];
+                    xx[i] = j;
+                }
+                if(Max < dp[i][j])
+                {
+                    ei = i; ej = j;//ei
+                    Max = dp[i][j];
+                }
+            }
+        }
+        xx[1] = 1;
+        if(Max)
+        {
+            printf("%d\n", Max);
+            k = 1;
+            b[k] = Susake[ei].n;
+            if(Max == 1)
+                printf("%d\n", b[1]);
+            else
+            {
+                while(1)
+                {
+                    if(dp[ei][ej] == 1) break;
+                    ei = ej;
+                    ej = xx[ej];
+                    k++;
+                    b[k] = Susake[ei].n;
+                }
+                for(int i = k; i >= 2; i--)
+                    printf("%d ", b[i]);
+                printf("%d\n", b[1]);
+            }
+        }
+        else printf("0\n");
+    }
+    return 0;
+}
