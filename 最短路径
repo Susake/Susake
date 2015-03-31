@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <string.h>
+#define Max 100
+int vexNum, arcNum;
+int vexs[Max], arcs[Max][Max];
+int INF = 0xffff;
+int final[Max], path[Max], d[Max];
+int D[Max][Max], Path[Max][Max];
+void dijkstra(int v){
+    int i, j, k, min, p, m, b[Max];
+    final[v] = 1;
+    for(i = 0; i < vexNum; i++)
+        if(i != v){
+            d[i] = arcs[v][i];
+            path[i] == arcs[v][i] < INF ? v : -1;
+            final[i] = 0;
+        }
+    for(i = 0; i < vexNum; i++){
+        min = INF;
+        for(j = 0; j < vexNum; j++)
+            if(!final[j] && d[j] < min){
+                min = d[j];
+                k = j;
+            }
+        final[k] = 1;
+        for(j = 0; j < vexNum; j++)
+            if(!final[j] && arcs[k][j] < INF && arcs[k][j] + d[k] < d[j]){
+                d[j] = arcs[k][j] + d[k];
+                path[j] = k;
+            }
+    }
+    for(i = 0; i < vexNum; i++)
+        if(i != v){
+            printf("%d %d\n", v, i);////////////////
+            p = path[i];
+            if(p == -1)
+                printf("no\n");
+            else
+            {
+                m = 0;
+                b[m++] = i;//////////
+                while(p != v){
+                    b[m++] = p;/////////////////
+                    p = path[p];
+                }
+                b[m] = v;/////////////
+                for(j = m; j > 0; j--)
+                    printf("%d->", b[j]);//////////////
+                printf("%d,%d\n", b[0], d[i]);
+            }
+        }
+}
+void floyd(){
+    int i, j, k, p, m, b[Max];
+    for(i = 0; i < vexNum; i++)
+        for(j = 0; j < vexNum; j++){
+            D[i][j] = arcs[i][j];
+            if(i != j && arcs[i][j] < INF)
+                Path[i][j] = i;
+            else
+                Path[i][j] = -1;
+        }
+    for(k = 0; k < vexNum; k++)
+        for(i = 0; i < vexNum; i++)
+            for(j = 0; j < vexNum; j++)
+                if(D[i][k] + D[k][j] < D[i][j]){
+                    D[i][j] = D[i][k] + D[k][j];
+                    Path[i][j] = Path[k][j];
+                }
+    for(i = 0; i < vexNum; i++)
+        for(j = 0; j < vexNum; j++)
+            if(i != j){
+                printf("%d %d\n", i, j);
+                p = Path[i][j];
+                if(p == -1)
+                    printf("no\n");
+                else{
+                    m = 0;
+                    b[m++] = j;
+                    while(p != i){
+                        b[m++] = p;
+                        p = Path[i][p];
+                    }
+                    b[m] = i;
+                    for(k = m; k > 0; k--)
+                        printf("%d->", b[k]);
+                    printf("%d %d\n", b[0], D[i][j]);
+                }
+            }
+}
+int main(int argc, char *argv[]){
+    int i, j, v1, v2;
+    scanf("%d%d", &vexNum, &arcNum);
+    for(i = 0; i < vexNum; i++)
+        scanf("%d", &vexs[i]);
+    for(i = 0; i < vexNum; i++)
+        for(j = 0; j < vexNum; j++)
+            arcs[i][j] = INF;
+    for(i = 0; i < arcNum; i++){
+        scanf("%d%d", &v1, &v2);
+        scanf("%d", &arcs[v1][v2]);
+    }
+    dijkstra(0);
+    //floyd();
+    return 0;
+}
+/*
+3 5
+0 1 2
+
+0 1 4
+0 2 11
+1 0 6
+1 2 2
+2 0 3
+*/
