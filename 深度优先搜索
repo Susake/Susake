@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+
+int maxstep;
+int s[100][100];
+int n, m;
+
+void dfs(int v, int c)
+{
+    int i;
+    if(maxstep < c)
+        maxstep = c;
+    for(i = 0; i < n; i++)
+    {
+        if(s[v][i] && s[i][v] && i != v)
+        {
+            s[v][i] = 0;
+            dfs(i, c + 1);
+            s[v][i] = 1;
+        }
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    int i, v1, v2;
+    for(; scanf("%d%d", &n, &m) != EOF && n + m; printf("%d\n", maxstep))
+    {
+        memset(s, 0, sizeof(s));
+        for(i = 1; i <= m; i++)
+        {
+            scanf("%d%d", &v1, &v2);
+            s[v1][v2] = s[v2][v1] = 1;
+        }
+        maxstep = -1;
+        for(i = 0; i < n; i++)
+            dfs(i, 0);
+    }
+    return 0;
+}
