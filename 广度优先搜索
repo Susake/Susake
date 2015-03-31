@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+using namespace std;
+
+int sx, sy, ex = 3, ey = 4;
+int dir[8][2] = {1, 1, 1, -1, -1, -1, -1, 1, 0, -1, 1, 0, -1, 0, 0, 1};
+char x1, y1, x2, y2;
+
+struct Node
+{
+    int x;
+    int y;
+    int px;
+    int py;
+    int d;
+    int step;
+    int visit;
+};
+
+Node Susake[200][200];
+int map[200][200], sum;
+char path[200][300];
+
+void bfs(int a, int b)
+{
+    memset(Susake, 0, sizeof(Susake));
+    queue <Node> q;
+    Node cur;
+
+    Susake[sx][sy].x = a;
+    Susake[sx][sy].y = b;
+    Susake[sx][sy].px = a;
+    Susake[sx][sy].py = b;
+    Susake[sx][sy].step = 0;
+    Susake[sx][sy].visit = 1;
+
+    q.push(Susake[sx][sy]);
+
+    if(sx == ex && sy == ey)
+    {
+        printf("%d\n", sum);
+        return ;
+    }
+
+    while(!q.empty())
+    {
+        cur = q.front();
+        q.pop();
+        if(cur.x == ex && cur.y == ey)
+        {
+            sum = cur.step;
+            printf("%d\n", sum);
+            int tx = Susake[ex][ey].px, ty = Susake[ex][ey].py;
+            int i = 0;
+            memset(path, 0, sizeof(path));
+            if(tx < ex && ty < ey) strcpy(path[i++], "RD");
+            if(tx == ex && ty < ey) strcpy(path[i++], "R");
+            if(tx < ex && ty == ey) strcpy(path[i++], "D");
+            if(tx == ex && ty > ey) strcpy(path[i++], "L");
+            if(tx > ex && ty == ey) strcpy(path[i++], "U");
+            if(tx < ex && ty > ey) strcpy(path[i++], "LD");
+            if(tx > ex && ty > ey) strcpy(path[i++], "LU");
+            if(tx > ex && ty < ey) strcpy(path[i++], "RU");
+            //printf("%d %d %d %d\n", tx, ty, ex, ey);
+            ex = tx; ey = ty;
+            while(tx != sx || ty != sy)
+            {
+                tx = Susake[tx][ty].px;
+                ty = Susake[tx][ty].py;
+                //printf("%d %d %d %d\n", tx, ty, ex, ey);
+                if(tx < ex && ty < ey) strcpy(path[i++], "RD");
+                if(tx == ex && ty < ey) strcpy(path[i++], "R");
+                if(tx < ex && ty == ey) strcpy(path[i++], "D");
+                if(tx == ex && ty > ey) strcpy(path[i++], "L");
+                if(tx > ex && ty == ey) strcpy(path[i++], "U");
+                if(tx < ex && ty > ey) strcpy(path[i++], "LD");
+                if(tx > ex && ty > ey) strcpy(path[i++], "LU");
+                if(tx > ex && ty < ey) strcpy(path[i++], "RU");
+                //printf("%d %d %d %d\n", tx, ty, ex, ey);
+                ex = tx; ey = ty;
+            }
+            for(int j = i - 1; j >= 0; j--)
+                printf("%s\n", path[j]);
+            break;
+        }
+        for(int i = 0; i < 8; i++)
+        {
+            int tx = cur.x + dir[i][0];
+            int ty = cur.y + dir[i][1];
+            if(Susake[tx][ty].visit == 0 && map[tx][ty])
+            {
+                Susake[tx][ty].x = tx;
+                Susake[tx][ty].y = ty;
+                Susake[tx][ty].step = cur.step + 1;
+                Susake[tx][ty].visit = 1;
+                //save PREVIOUS
+                Susake[tx][ty].px = cur.x;
+                Susake[tx][ty].py = cur.y;
+                Susake[tx][ty].d = i;
+                q.push(Susake[tx][ty]);
+            }
+        }
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    memset(map, 0, sizeof(map));
+    for(int i = 1; i <= 8; i++)
+        for(int j = 1; j <= 8; j++) map[i][j] = 1;
+    scanf("%c%c%*c%c%c", &x1, &y1, &x2, &y2);
+    sum = 0;
+    sx = 57 - y1; sy = x1 - 96;
+    ex = 57 - y2; ey = x2 - 96;
+    //printf("%d %d %d %d\n", sx, sy, ex, ey);
+    bfs(sx, sy);
+    return 0;
+}
