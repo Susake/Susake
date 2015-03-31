@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+#define N 1000
+char a[N], b[N];
+int Susake_lcs[N][N];
+
+void Susake_LCS(char*s1, char *s2, int m, int n)
+{
+    memset(Susake_lcs, 0, sizeof(Susake_lcs));
+    int k = 0;
+    for(int i = 1; i <= m + 1; i++)
+        for(int j = 1; j <= n + 1; j++)
+        {
+            if(s1[i - 1] == s2[j - 1])
+            {
+                Susake_lcs[i][j] = Susake_lcs[i - 1][j - 1] + 1;
+                k++;
+            }
+            else if(Susake_lcs[i - 1][j] > Susake_lcs[i][j - 1])
+                Susake_lcs[i][j]= Susake_lcs[i - 1][j];
+            else
+                Susake_lcs[i][j] = Susake_lcs[i][j - 1];
+        }
+    printf("%d\n", Susake_lcs[m][n]);
+}
+
+int main(int argc, char *argv[])
+{
+    int n, m;
+    while(scanf("%s%s", a, b) != EOF)
+    {
+        int m = strlen(a);
+        int n = strlen(b);
+        Susake_LCS(a, b, m, n);
+    }
+    return 0;
+}
