@@ -1,0 +1,36 @@
+void Hero::Hero_getdir(int touch_x, int touch_y) {
+	//获取触碰点位置
+	point_x = touch_x;
+	point_y = touch_y;
+	//获取英雄在屏幕中的位置
+	int npc_x = hero->getPositionX();
+	int npc_y = hero->getPositionY();
+
+	int move_x = (int)(npc_x - point_x);
+	int move_y = (int)(npc_y - point_y);
+
+	if(move_x >= 10 && move_y <= -10) {
+		hero_dir = run_left_back;
+	}
+	else if(move_x >= 10 && move_y >= 10) {
+	    hero_dir = run_left_front;
+	}
+	else if(move_x <= -10 && move_y <= -10) {
+	    hero_dir = run_right_back;
+	}
+	else if(move_x <= -10 && move_y >= 10) {
+	    hero_dir = run_right_front;
+	}
+	else if(move_x > -10 && move_x < 10 && move_y > 0) {
+	    hero_dir = run_front;
+	}
+	else if(move_x > -10 && move_x < 10 && move_y < 0) {
+	    hero_dir = run_back;
+	}
+	else if(move_x > 0 && move_y > -10 && move_y < 10) {
+	    hero_dir = run_left;
+	}
+	else if(move_x < 0 && move_y > -10 && move_y < 10) {
+	    hero_dir = run_right;
+	}
+}
