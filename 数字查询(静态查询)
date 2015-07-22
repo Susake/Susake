@@ -32,32 +32,13 @@ int main(int argc, char *argv[])
 //STL实现
 #include <bits/stdc++.h>
 
-int a[5] = {5, 3, 3, 2, 1};
-
-template <class T>
-inline T bfind(T r, T key)
-{
-    T l = 1, m, k, flag = 0;
-    while(l != r)
-    {
-        m = (r + l) / 2;
-        if(a[m] > key) l = m + 1;
-        if(a[m] < key) r = m - 1;
-        if(a[m] == key)
-        {
-            r = m - 1;
-            flag = 1;
-            k = m;
-            if(a[r] != key) break;
-        }
-    }
-    return flag ? k : -1;
-}
+std::vector <int> A(5);
 
 int main(int argc, char *argv[])
 {
-    int key = 1;
-    printf("%d\n", bfind(5, key));
+    A[0] = 1;A[1] = 2;A[2] = 3;A[3] = 3;A[4] = 5;
+    for(int i = 0; i < A.size(); i++)
+        std::cout << A.size() - (upper_bound(A.begin(), A.end(), A[i]) - A.begin()) << "\n";
         return 0;
 }
 //扩展库中的伸展树
