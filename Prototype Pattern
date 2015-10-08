@@ -1,0 +1,69 @@
+main.cpp
+
+
+#include "Prototype.h"
+#include <iostream>
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    
+    Prototype *p = new ConcreatePrototype();
+
+    Prototype *p1 = p->Clone();
+
+    return 0;
+}
+
+Prototype.h
+
+
+#ifndef _PROTOTYPE_H
+#define _PROTOTYPE_H
+
+class Prototype {
+public :
+    virtual ~Prototype();
+
+    virtual Prototype *Clone() const = 0;
+protected :
+    Prototype();
+};
+
+class ConcreatePrototype :public Prototype {
+public :
+    ConcreatePrototype();
+
+    ConcreatePrototype(const ConcreatePrototype &cp);
+
+    ~ConcreatePrototype();
+
+    Prototype *Clone() const;
+};
+
+#endif
+
+Prototype.cpp
+
+#include "Prototype.h"
+#include <iostream>
+using namespace std;
+
+Prototype::Prototype() {}
+
+Prototype::~Prototype() {}
+
+Prototype *Prototype::Clone() const {
+    return 0;
+}
+
+ConcreatePrototype::ConcreatePrototype() {}
+
+ConcreatePrototype::~ConcreatePrototype() {}
+
+ConcreatePrototype::ConcreatePrototype(const ConcreatePrototype &cp) {
+    cout << "ConcreatePrototype..." << endl;
+}
+
+Prototype *ConcreatePrototype::Clone() const {
+    return new ConcreatePrototype(*this);
+}
