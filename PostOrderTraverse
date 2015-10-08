@@ -1,0 +1,51 @@
+int PreOrder[1000], InOrder[1000];
+int flag, n;
+typedef struct BiTNode {
+    int data;
+    struct BiTNode *LChild, RChild;
+} BiTNode, *BiTree;
+void PostOrderTraverse(BiTree T) {
+    if(T == NULL) return ;
+    PostOrderTraverse(T -> LChild);
+    PostOrderTraverse(T -> RChild);
+    if(T -> data == PreOrder[0]) printf("%d\n", T -> data);
+    else printf("%d ", T -> data);
+}
+BiTNode *CreatePreTree(int *PreOrder, int *InOrder, int n) {
+    int i;
+    BiTNode *pre;
+    for(i = 0; i < n; ++i) {
+        if(PreOrder[0] == InOrder[i]) {
+            pre = (BiTNode *)malloc(sizeof(BiTNode));
+            pre -> data = PreOrder[0];
+            pre -> LChild = CreatePreTree(PreOrder + 1, InOrder, i);
+            pre -> RChild = CreatePreTree(PreOrder + i + 1, InOrder + i + 1, n - i - 1);
+            return pre;
+        }
+    }
+    return NULL;
+}
+void destoryBiTree(BiTree &T) {
+    if(T == NULL) return ;
+    destoryBiTree(T -> LChild);
+    destoryBiTree(T -> RChild);
+    free(T);
+}
+int main() {
+    int i;
+    BiTree T;
+    while(scanf("%d", &n) != EOF) {
+        for (i = 0; i < n; ++i) scanf("%d", PreOrder + i);
+        for (i = 0; i < n; ++i) scanf("%d", InOrder + i);
+        flag = 0;
+        T = CreatePreTree(PreOrder, InOrder, n);
+        PostOrderTraverse(T);
+        destoryBiTree(T);
+    }
+    return 0;
+}
+7
+4 2 3 1 7 5 6
+3 2 1 4 5 7 6
+
+3 1 2 5 6 7 4
