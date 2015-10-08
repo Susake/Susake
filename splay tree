@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+__gnu_pbds::tree <int, int, std::less<int>, __gnu_pbds::splay_tree_tag, __gnu_pbds::tree_order_statistics_node_update> sp_t;
+
+int main(int argc, char *argv[])
+{
+    sp_t[1] = 1;///0下标,为1的有一个
+    sp_t[2] = 1;///1下标,为2的有一个
+    sp_t[3] = 2;///2下标,为3的有两个
+    sp_t[5] = 1;///3下标,为5的有一个
+    int sum = 0;
+    int key = 5;///查询比key大的个数
+    for(int i = sp_t.order_of_key(key) + 1; i < sp_t.size(); i++)///从查找的元素的后一个序列开始
+        sum += sp_t[sp_t.find_by_order(i) -> first];
+    printf("%d\n", sum);
+        return 0;
+}
