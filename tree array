@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
+#include <iostream>
+#include <vector>
+#include <list>
+#include <stack>
+#include <queue>
+#include <map>
+#include <set>
+#include <algorithm>
+const double PI=acos(-1.0);///3.141593
+const long long MOD=(long long)1E9+7LL;///1000000007template <class T> T Susake_pow(T a,T b)///pow
+{T res;if(b==0) return 1;else while((b&1)==0){b>>=1;a*=a;}res=a;b>>=1;while(b!=0){a*=a;if((b&1)!=0)res*=a;b>>=1;}return res;}
+template<class T> inline T gcd(T a,T b)///gcd
+{if(a<0)return gcd(-a,b);if(b<0)return gcd(a,-b);return (b==0)?a:gcd(b,a%b);}
+template<class T> inline T lcm(T a,T b)///lcm
+{if(a<0)return lcm(-a,b);if(b<0)return lcm(a,-b);return a*(b/gcd(a,b));}int isdigit(int c);int islower(int c);int isupper(int c);int tolower(int c);int toupper(int c);
+///union_find
+int fa[1];
+template <class T> inline T union_find(T x)
+{return fa[x] == x ? x : fa[x] = union_find(fa[x]);}
+///tree array
+int t_a[200001], t_c[200001];
+int t_n;
+template <class T> inline T lowbit(T x){return x&(-x);}
+void update(int p,int x){while(p<=t_n){t_c[p]+=x;p+=lowbit(p);}}
+template <class T> inline T sum(T p){T s=0;while(p>0){s+=t_c[p];p-=lowbit(p);}return s;}
+
+int main(int argc, char *argv[])
+{
+    int t;
+    scanf("%d", &t);
+    char s[100];
+    for(int z = 1; z <= t; z++)
+    {
+        memset(t_a, 0, sizeof(t_a));
+        memset(t_c, 0, sizeof(t_c));
+        scanf("%d", &t_n);
+        for(int i = 1; i <= t_n; i++)
+        {
+            t_a[i] += 0;
+            update(i, 0);
+        }
+        for(int i = 1; i <= t_n; i++)
+        {
+            int x;
+            scanf("%d%*c", &x);
+            t_a[i] += x;
+            update(i, x);
+        }
+        printf("Case %d:\n", z);
+        while(scanf("%s", s))
+        {
+            if(strcmp(s, "End") == 0) break;
+            if(strcmp(s, "Add") == 0)
+            {
+                int j, k;
+                scanf("%d%d", &j, &k);
+                t_a[j] += k;
+                update(j, k);
+            }
+            if(strcmp(s, "Sub") == 0)
+            {
+                int j, k;
+                scanf("%d%d", &j, &k);
+                t_a[j] -= k;
+                update(j, -k);
+            }
+            if(strcmp(s, "Query") == 0)
+            {
+                int j, k;
+                scanf("%d%d", &j, &k);
+                printf("%d\n", sum(k) - sum(j - 1));
+            }
+        }
+        getchar();
+    }
+    return 0;
+}
