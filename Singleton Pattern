@@ -1,0 +1,50 @@
+main.cpp
+
+#include "Singleton.h"
+#include <iostream>
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    
+    Singleton *sgn = Singleton::Instance();
+
+    return 0;
+}
+
+Singleton.h
+
+#ifndef _SINGLETON_H
+#define _SINGLETON_H
+
+class Singleton {
+public :
+    static Singleton *Instance();
+protected :
+    Singleton();
+private :
+    static Singleton *_instance;
+};
+
+#endif
+
+Singleton.cpp
+
+
+#include "Singleton.h"
+#include <iostream>
+using namespace std;
+
+Singleton *Singleton::_instance = 0;
+
+Singleton::Singleton() {
+    cout << "Singleton..." << endl;
+}
+
+Singleton *Singleton::Instance() {
+
+    if (_instance == 0) {
+        _instance = new Singleton();
+    }
+
+    return _instance;
+}
