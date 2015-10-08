@@ -1,0 +1,224 @@
+#include <stdio.h>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+int a[1003][1003];
+char path[2003];
+
+void judge(int &x2, int &x5, int n)
+{
+    x2 = x5 = 0;
+    while(n % 5 == 0 && n)
+    {
+        n /= 5;
+        x5++;
+    }
+    while(n % 2 == 0 && n)
+    {
+        n /= 2;
+        x2++;
+    }
+}
+
+struct Node
+{
+    int Susake2;
+    int Susake5;
+    int px, py;
+};
+
+Node Susake[1003][1003], dp1[1003][1003], dp2[1003][1003];
+
+int main(int argc, char *argv[])
+{
+    int n, x2, x5, Min1, Min2, k1, k2, flag, ex, ey, tx, ty, si, sj, God;
+    memset(a, 0, sizeof(a));
+    memset(Susake, 0, sizeof(Susake));
+    memset(path, 0, sizeof(path));
+    scanf("%d", &n);
+    flag = 0;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+        {
+            scanf("%d", &a[i][j]);
+            if(a[i][j] == 0 && flag == 0)
+            {
+                flag = 1;
+                si = i;
+                sj = j;
+            }
+            judge(x2, x5, a[i][j]);
+            Susake[i][j].Susake2 = x2;
+            Susake[i][j].Susake5 = x5;
+        }
+    //bround
+    dp1[0][0].Susake2 = 0;
+    dp1[1][0].Susake2 = 0;
+    dp1[0][1].Susake2 = 0;
+    dp2[0][0].Susake5 = 0;
+    dp2[1][0].Susake5 = 0;
+    dp2[0][1].Susake5 = 0;
+    for(int i = 2; i <= n; i++)
+    {
+        dp1[i][0].Susake2 = 1000000009;
+        dp1[0][i].Susake2 = 1000000009;
+        dp2[i][0].Susake5 = 1000000009;
+        dp2[0][i].Susake5 = 1000000009;
+    }
+    //according to 2 dp
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+        {
+            dp1[i][j].Susake2 = min(dp1[i - 1][j].Susake2, dp1[i][j - 1].Susake2) + Susake[i][j].Susake2;
+            //Save path
+            if(dp1[i - 1][j].Susake2 < dp1[i][j - 1].Susake2)
+            {
+                dp1[i][j].px = i - 1;
+                dp1[i][j].py = j;
+            }
+            if(dp1[i - 1][j].Susake2 >= dp1[i][j - 1].Susake2)
+            {
+                dp1[i][j].px = i;
+                dp1[i][j].py = j - 1;
+            }
+        }
+    Min1 = dp1[n][n].Susake2;
+    //according to 5 dp
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+        {
+            dp2[i][j].Susake5 = min(dp2[i - 1][j].Susake5, dp2[i][j - 1].Susake5) + Susake[i][j].Susake5;
+            //Save path
+            if(dp2[i - 1][j].Susake5 < dp2[i][j - 1].Susake5)
+            {
+                dp2[i][j].px = i - 1;
+                dp2[i][j].py = j;
+            }
+            if(dp2[i - 1][j].Susake5 >= dp2[i][j - 1].Susake5)
+            {
+                dp2[i][j].px = i;
+                dp2[i][j].py = j - 1;
+            }
+        }
+    Min2 = dp2[n][n].Susake5;
+    //print the path
+    dp1[1][1].px = 1;
+    dp1[1][1].py = 1;
+    dp2[1][1].px = 1;
+    dp2[1][1].py = 1;
+    God = 0;
+    if(min(Min1, Min2) > 1 && flag)
+    {
+        printf("%d\n", 1);
+        for(int i = 2; i <= si; i++)
+            printf("D");
+        for(int i = 2; i <= sj; i++)
+            printf("R");
+        for(int i = si + 1; i <= n; i++)
+            printf("D");
+        for(int i = sj + 1; i <= n; i++)
+            printf("R");
+        printf("\n");
+    }
+    else
+    {
+        if(Min1 <= Min2)
+        {
+            k1 = 0;
+            tx = ty = n;
+            ex = tx; ey = ty;
+            tx = dp1[tx][ty].px;
+            ty = dp1[tx][ty].py;
+            if(a[ex][ey] == 0)
+                God = 1;
+            if(a[tx][ty] == 0)
+                God = 1;
+            if(tx < ex)
+            {
+                k1++;
+                path[k1] = 'D';
+            }
+            if(ty < ey)
+            {
+                k1++;
+                path[k1] = 'R';
+            }
+            ex = tx; ey = ty;
+            while(tx != 1 || ty != 1)
+            {
+                tx = dp1[ex][ey].px;
+                ty = dp1[ex][ey].py;
+                if(a[tx][ty] == 0)
+                God = 1;
+                if(tx < ex)
+                {
+                    k1++;
+                    path[k1] = 'D';
+                }
+                if(ty < ey)
+                {
+                    k1++;
+                    path[k1] = 'R';
+                }
+                ex = tx; ey = ty;
+            }
+            if(God == 1)
+                printf("1\n");
+            else
+                printf("%d\n", min(Min1, Min2));
+            for(int i = k1; i >= 1; i--)
+                printf("%c", path[i]);
+            printf("\n");
+        }
+        else
+        {
+            k2 = 0;
+            tx = ty = n;
+            ex = tx; ey = ty;
+            tx = dp2[tx][ty].px;
+            ty = dp2[tx][ty].py;
+            if(a[ex][ey] == 0)
+                God = 1;
+            if(a[tx][ty] == 0)
+                God = 1;
+            if(tx < ex)
+            {
+                k2++;
+                path[k2] = 'D';
+            }
+            if(ty < ey)
+            {
+                k2++;
+                path[k2] = 'R';
+            }
+            ex = tx; ey = ty;
+            while(tx != 1 || ty != 1)
+            {
+                tx = dp2[ex][ey].px;
+                ty = dp2[ex][ey].py;
+                if(a[tx][ty] == 0)
+                God = 1;
+                if(tx < ex)
+                {
+                    k2++;
+                    path[k2] = 'D';
+                }
+                if(ty < ey)
+                {
+                    k2++;
+                    path[k2] = 'R';
+                }
+                ex = tx; ey = ty;
+            }
+            if(God == 1)
+                printf("1\n");
+            else
+                printf("%d\n", min(Min1, Min2));
+            for(int i = k2; i >= 1; i--)
+                printf("%c", path[i]);
+            printf("\n");
+        }
+    }
+    return 0;
+}
